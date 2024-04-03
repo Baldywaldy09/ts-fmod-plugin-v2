@@ -1,14 +1,27 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
-#include "pch.h"
+#include "../pch.h"
 
 #include "sdk_stores.h"
 #include "telemetry_data.h"
+#include "globalVariables.h"
 #include "memory_structure.h"
 #include "memory.h"
+#include <unordered_set>
+#include <iostream>
+#include <fstream>
+
+#include "utils/memory.h"
+#include "prism/token.h"
+#include "prism/string.h"
+#include "core.h"
+
+#include "hooks/sound.h"
 
 fmod_manager* fmod_manager_instance = nullptr;
+core* g_core = nullptr;
 
 telemetry_data_t telemetry_data;
+global_variables globalVariables{};
 
 scs_log_t scs_log;
 
@@ -37,6 +50,8 @@ bool is_window_moving = false;
 bool is_left_window_button_active = false;
 bool is_right_window_button_active = false;
 
+bool start_bad = true;
+
 scs_telemetry_register_for_channel_t register_for_channel = nullptr;
 scs_telemetry_unregister_from_channel_t unregister_from_channel = nullptr;
 #define register_channel(name, index, type, field) register_for_channel(SCS_TELEMETRY_##name, index, SCS_VALUE_TYPE_##type, SCS_TELEMETRY_CHANNEL_FLAG_no_value, telemetry_store_##type, &telemetry_data.field);
@@ -54,6 +69,22 @@ bool should_engine_brake_sound_play()
 
 SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info, scs_context_t context)
 {
+    const int nChars = 256;
+    HWND handle;
+    char Buff[nChars];
+    handle = GetForegroundWindow();
+    GetWindowTextA(handle, Buff, nChars);
+    std::string current_window(Buff);
+    current_window.erase(std::remove(current_window.begin(), current_window.end(), '\n'), current_window.end());
+
+    std::unordered_set<std::string> allowed_windows = {
+        "Euro Truck Simulator 2", "Euro Truck Simulator 2 Multiplayer",
+        "American Truck Simulator", "American Truck Simulator Multiplayer"
+    };
+    
+    if (allowed_windows.find(current_window) != allowed_windows.end()) fmod_manager_instance->set_minimised(false);
+    else fmod_manager_instance->set_minimised(true);
+
     fmod_manager_instance->set_event_parameter("engine/engine", "rpm", telemetry_data.rpm);
     fmod_manager_instance->set_event_parameter("engine/exhaust", "rpm", telemetry_data.rpm);
     fmod_manager_instance->set_event_parameter("engine/engine", "load", telemetry_data.effective_throttle);
@@ -79,7 +110,7 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
                 const auto engine_state = game_actor->get_engine_state();
                 if (engine_state != stored_engine_state) // engine state changed TODO: Find start_bad
                 {
-                    if (engine_state > 0 && stored_engine_state == 0)
+                    if (!start_bad && engine_state > 0 && stored_engine_state == 0)
                     {
                         // engine is starting/running
                         fmod_manager_instance->set_event_parameter("engine/engine", "play", 1);
@@ -97,6 +128,8 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
                         fmod_manager_instance->set_event_parameter("engine/turbo", "play", 0);
                     }
                     stored_engine_state = engine_state;
+
+                    if (start_bad && engine_state == 0) start_bad = false;
                 }
 
                 fmod_manager_instance->set_event_parameter("engine/engine",
@@ -131,6 +164,24 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
                 {
                     fmod_manager_instance->set_event_state("interior/stick_wipers", true);
                     wipers_stick_state = wipers_stick;
+                }
+
+                if (game_actor->get_wiper_position() > 0 && game_actor->get_wiper_position() < 0.5)
+                {
+                    // scs does it where /wipers_up is called when its actually moving down
+
+                    fmod_manager_instance->set_event_state("interior/wipers_up", false);
+                    fmod_manager_instance->set_event_state("interior/wipers_down", true, true);
+                }
+                else if (game_actor->get_wiper_position() >= 0.5)
+                {
+                    fmod_manager_instance->set_event_state("interior/wipers_down", false);
+                    fmod_manager_instance->set_event_state("interior/wipers_up", true, true);
+                }
+                else
+                {
+                    fmod_manager_instance->set_event_state("interior/wipers_up", false);
+                    fmod_manager_instance->set_event_state("interior/wipers_down", false);
                 }
 
                 if ((game_actor->is_left_window_moving != 0 || game_actor->is_right_window_moving != 0) &&
@@ -193,18 +244,19 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
                 get_is_camera_inside())
             {
                 fmod_manager_instance->set_bus_volume("outside", fmod_manager_instance->config->windows_closed);
-                fmod_manager_instance->set_bus_volume("exterior", fmod_manager_instance->config->windows_closed);
-                // backward compatibility
+                fmod_manager_instance->set_bus_volume("outside/exterior", fmod_manager_instance->config->windows_closed);
+                fmod_manager_instance->set_bus_volume("exterior", fmod_manager_instance->config->windows_closed); // backward compatibility
             }
             else
             {
                 fmod_manager_instance->set_bus_volume("outside", 1);
+                fmod_manager_instance->set_bus_volume("outside/exterior", 1);
                 fmod_manager_instance->set_bus_volume("exterior", 1); // backward compatibility
             }
 
             if (interior->get_is_on_interior_cam())
             {
-                fmod_manager_instance->set_bus_volume("cabin/interior", fmod_manager_instance->config->interior);
+                fmod_manager_instance->set_bus_volume("cabin/interior", fmod_manager_instance->config->interior_buttons);
             }
             else
             {
@@ -212,8 +264,7 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
             }
 
             fmod_manager_instance->set_global_parameter("cabin_out", interior->get_cabin_out());
-            fmod_manager_instance->set_global_parameter("cabin_rot",
-                                                        interior->get_camera_rotation_in_cabin());
+            fmod_manager_instance->set_global_parameter("cabin_rot", interior->get_camera_rotation_in_cabin());
             fmod_manager_instance->set_global_parameter("surr_type", interior->get_has_echo());
 
             const auto now_playing_navigation_sound = interior->get_now_playing_navigation_sound();
@@ -283,7 +334,6 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
     fmod_manager_instance->update();
 }
 
-
 // https://stackoverflow.com/questions/940707/how-do-i-programmatically-get-the-version-of-a-dll-or-exe-file
 DWORD get_product_version()
 {
@@ -342,6 +392,7 @@ void register_telem_channels()
 
 SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_init_params_t* const params)
 {
+    memset(&globalVariables, 0, sizeof(globalVariables));
     const auto* const version_params = reinterpret_cast<const scs_telemetry_init_params_v101_t*>(params);
 
     scs_log = version_params->common.log;
@@ -350,21 +401,21 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_in
     if (game_version != common::supported_game_version)
     {
         std::stringstream ss;
-        ss << "[ts-fmod-plugin V" << common::plugin_version << "] Detected game version 1." << game_version
+        ss << "[ts-fmod-plugin-v2 V" << common::plugin_version << "] Detected game version 1." << game_version
             << " while plugin is made for version 1." << common::supported_game_version <<
             ". The plugin will not load to prevent crashes.";
         scs_log(SCS_LOG_TYPE_error, ss.str().c_str());
         return SCS_RESULT_generic_error;
     }
     std::stringstream ss;
-    ss << "[ts-fmod-plugin V" << common::plugin_version <<
+    ss << "[ts-fmod-plugin-v2 V" << common::plugin_version <<
         "] Searching for memory offsets... If this is one of the last messages in the log after a crash, try disabling this plugin.";
     scs_log(SCS_LOG_TYPE_message, ss.str().c_str());
 
     const auto base_ctrl_ptr_offset = pattern::scan("48 8b 05 ? ? ? ? 48 8b 4b ? 48 8b 80 ? ? ? ? 48 8b b9", game_base, image_size);
     if (base_ctrl_ptr_offset == NULL)
     {
-        version_params->common.log(SCS_LOG_TYPE_error, "[ts-fmod-plugin] Unable to find base_ctrl pointer offset");
+        version_params->common.log(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Unable to find base_ctrl pointer offset");
         return SCS_RESULT_generic_error;
     }
     base_ctrl_ptr = base_ctrl_ptr_offset + *reinterpret_cast<uint32_t*>(base_ctrl_ptr_offset + 3) + 7;
@@ -373,13 +424,13 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_in
     const auto unk_interior_ptr_offset = pattern::scan("44 38 3b 0f 84 ? ? ? ? 8b 05 ? ? ? ? 48 8b 3d ? ? ? ? 85 c0 74", game_base, image_size);
     if (unk_interior_ptr_offset == NULL)
     {
-        version_params->common.log(SCS_LOG_TYPE_error, "[ts-fmod-plugin] Unable to find unk_interior pointer offset");
+        version_params->common.log(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Unable to find unk_interior pointer offset");
         return SCS_RESULT_generic_error;
     }
     unk_interior_ptr = unk_interior_ptr_offset + *reinterpret_cast<uint32_t*>(unk_interior_ptr_offset + 0x12) + 0x16;
 
     ss.str("");
-    ss << "[ts-fmod-plugin] Found base_ctrl @ " << std::hex << (base_ctrl_ptr - game_base) << " and unk_interior @" << (unk_interior_ptr - game_base);
+    ss << "[ts-fmod-plugin-v2] Found base_ctrl @ " << std::hex << (base_ctrl_ptr - game_base) << " and unk_interior @" << (unk_interior_ptr - game_base);
     scs_log(SCS_LOG_TYPE_message, ss.str().c_str());
 
     const auto events_registered =
@@ -389,7 +440,7 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_in
 
     if (!events_registered)
     {
-        version_params->common.log(SCS_LOG_TYPE_error, "[ts-fmod-plugin] Unable to register event callbacks");
+        version_params->common.log(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Unable to register event callbacks");
         return SCS_RESULT_generic_error;
     }
     register_for_channel = version_params->register_for_channel;
@@ -398,35 +449,37 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_in
 
     if (!fmod_manager_instance->init())
     {
-        scs_log(SCS_LOG_TYPE_error, "[ts-fmod-plugin] Could not init fmod");
+        scs_log(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not init fmod");
+        return SCS_RESULT_generic_error;
+    }
+
+    g_core = new core(scs_log, fmod_manager_instance);
+    if (!g_core->init()) 
+    {
+        scs_log(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not create fmod hook");
         return SCS_RESULT_generic_error;
     }
 
     register_telem_channels();
 
-    scs_log(0, "[ts-fmod-plugin] Plugin loaded");
+    fmod_manager_instance->set_event_state("music/main_menu", true); // play menu music sound
+
+    scs_log(0, "[ts-fmod-plugin-v2] Plugin loaded");
 
     return SCS_RESULT_ok;
 }
 
-void shutdown()
+SCSAPI_VOID scs_telemetry_shutdown(void)
 {
     if (fmod_manager_instance != nullptr)
     {
         delete fmod_manager_instance;
         fmod_manager_instance = nullptr;
     }
+    delete g_core;
 }
 
-SCSAPI_VOID scs_telemetry_shutdown(void)
-{
-    shutdown();
-}
-
-BOOL APIENTRY DllMain(HMODULE hModule,
-                      DWORD ul_reason_for_call,
-                      LPVOID lpReserved
-)
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH)
     {

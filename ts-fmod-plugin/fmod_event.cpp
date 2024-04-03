@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "../pch.h"
 #include "fmod_event.h"
 
 FMOD_RESULT fmod_event::load_event_description()

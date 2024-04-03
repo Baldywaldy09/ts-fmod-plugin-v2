@@ -23,6 +23,7 @@ class fmod_manager
 
     bool load_selected_bank(const std::filesystem::path& plugin_files_dir);
     bool init_channels(const std::filesystem::path& plugin_files_dir);
+    void lowerVol(double volume);
 
 public:
     config* config;
@@ -38,6 +39,7 @@ public:
     FMOD::Studio::Bus* get_bus(const char* name);
 
     void set_paused(bool state);
+    void set_minimised(bool state);
     FMOD_RESULT update() const;
     FMOD_RESULT set_global_parameter(const char* param_name, float value) const;
     FMOD_RESULT set_event_parameter(const char* event_name, const char* param_name, float value);

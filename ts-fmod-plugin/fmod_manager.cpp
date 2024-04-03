@@ -1,5 +1,10 @@
-#include "pch.h"
+#include "../pch.h"
 #include "fmod_manager.h"
+#include <thread>
+#include <future>
+#include <chrono>
+#include <iostream>
+#include <functional>
 
 namespace fs = std::filesystem;
 
@@ -21,7 +26,7 @@ bool fmod_manager::load_selected_bank(const std::filesystem::path& plugin_files_
 
     if (!exists(selected_bank_file_path))
     {
-        scs_log_(SCS_LOG_TYPE_error, "[ts-fmod-plugin] Could not find the 'selected.bank.txt' file");
+        scs_log_(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not find the 'selected.bank.txt' file");
         return false;
     }
 
@@ -29,33 +34,55 @@ bool fmod_manager::load_selected_bank(const std::filesystem::path& plugin_files_
     std::string bank_name;
     if (!selected_bank_file.is_open())
     {
-        scs_log_(SCS_LOG_TYPE_error, "[ts-fmod-plugin] Could not read the 'selected.bank.txt' file");
+        scs_log_(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not read the 'selected.bank.txt' file");
         return false;
     }
 
     FMOD::Studio::Bank* bank;
     int i = 0;
-    while (selected_bank_file >> bank_name)
+
+    while (std::getline(selected_bank_file, bank_name))
     {
         auto bank_file_path = plugin_files_dir;
-        bank_file_path.append(bank_name).concat(".bank");
-
-        const auto res = system_->loadBankFile(
-            bank_file_path.generic_u8string().c_str(),
-            FMOD_STUDIO_LOAD_BANK_NORMAL,
-            &bank);
-        if (res != FMOD_OK)
+        if (bank_name._Starts_with("//") || bank_name == "")
         {
-            std::stringstream ss;
-            ss << "[ts-fmod-plugin] Could not load the bank file '" << bank_name << "' in 'selected.bank.txt' file, " <<
-                FMOD_ErrorString(res);
-            scs_log_(SCS_LOG_TYPE_error, ss.str().c_str());
-            return false;
+            scs_log_(0, "Skipping comment");
         }
-        selected_bank_names_.push_back(bank_name);
-        std::stringstream ss;
-        ss << "[ts-fmod-plugin] Using sound bank[" << i++ << "]: '" << bank_name << "'";
-        scs_log_(SCS_LOG_TYPE_message, ss.str().c_str());
+        else
+        {
+            if (bank_name.find(".bank") == std::string::npos) 
+            { 
+                bank_file_path.append(bank_name).concat(".bank"); 
+            }
+            else
+            {
+                bank_file_path.append(bank_name);
+
+                size_t pos = 0;
+                pos = bank_name.find(".bank", pos);
+                bank_name = bank_name.replace(pos, std::string(".bank").length(), "");
+            }
+
+            scs_log_(0, bank_file_path.string().c_str());
+            scs_log_(0, bank_name.c_str());
+
+            const auto res = system_->loadBankFile(
+                bank_file_path.generic_u8string().c_str(),
+                FMOD_STUDIO_LOAD_BANK_NORMAL,
+                &bank);
+            if (res != FMOD_OK)
+            {
+                std::stringstream ss;
+                ss << "[ts-fmod-plugin-v2] Could not load the bank file '" << bank_name << "' in 'selected.bank.txt' file, " <<
+                    FMOD_ErrorString(res);
+                scs_log_(SCS_LOG_TYPE_error, ss.str().c_str());
+                return false;
+            }
+            selected_bank_names_.push_back(bank_name);
+            std::stringstream ss;
+            ss << "[ts-fmod-plugin-v2] Using sound bank[" << i++ << "]: '" << bank_name << "'";
+            scs_log_(SCS_LOG_TYPE_message, ss.str().c_str());
+        }
     }
     return true;
 }
@@ -66,29 +93,29 @@ bool fmod_manager::init()
 
     if (co_init_res != S_OK && co_init_res != S_FALSE)
     {
-        scs_log_(SCS_LOG_TYPE_error, "[ts-fmod-plugin] CoInitializeEx Failed");
+        scs_log_(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] CoInitializeEx Failed");
         return false;
     }
-    const auto plugin_files_dir = fs::current_path().append("plugins/ts-fmod-plugin");
+    const auto plugin_files_dir = fs::current_path().append("plugins/ts-fmod-plugin-v2");
     auto res = FMOD::Studio::System::create(&system_);
     if (res != FMOD_OK)
     {
         scs_log_(SCS_LOG_TYPE_error,
-                 (std::string("[ts-fmod-plugin] Could not create FMOD system, ") + FMOD_ErrorString(res)).c_str());
+                 (std::string("[ts-fmod-plugin-v2] Could not create FMOD system, ") + FMOD_ErrorString(res)).c_str());
         return false;
     }
     res = system_->initialize(64, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr);
     if (res != FMOD_OK)
     {
         scs_log_(SCS_LOG_TYPE_error,
-                 (std::string("[ts-fmod-plugin] Could not initialize FMOD, ") + FMOD_ErrorString(res)).c_str());
+                 (std::string("[ts-fmod-plugin-v2] Could not initialize FMOD, ") + FMOD_ErrorString(res)).c_str());
         return false;
     }
     res = system_->getCoreSystem(&core_system_);
     if (res != FMOD_OK)
     {
         scs_log_(SCS_LOG_TYPE_error,
-                 (std::string("[ts-fmod-plugin] Could not load FMOD core system, ") + FMOD_ErrorString(res)).c_str());
+                 (std::string("[ts-fmod-plugin-v2] Could not load FMOD core system, ") + FMOD_ErrorString(res)).c_str());
         return false;
     }
     int driver_count;
@@ -96,7 +123,7 @@ bool fmod_manager::init()
     if (res != FMOD_OK)
     {
         scs_log_(SCS_LOG_TYPE_error,
-                 (std::string("[ts-fmod-plugin] Could not get FMOD driver count, ") + FMOD_ErrorString(res)).c_str());
+                 (std::string("[ts-fmod-plugin-v2] Could not get FMOD driver count, ") + FMOD_ErrorString(res)).c_str());
         return false;
     }
 
@@ -107,15 +134,15 @@ bool fmod_manager::init()
         if (res != FMOD_OK)
         {
             scs_log_(SCS_LOG_TYPE_error,
-                     (std::string("[ts-fmod-plugin] Could not get FMOD driver[") + std::to_string(i) + "] " +
+                     (std::string("[ts-fmod-plugin-v2] Could not get FMOD driver[") + std::to_string(i) + "] " +
                          FMOD_ErrorString(res)).c_str());
             if (i == 0) return false; // Only fail if not able to get the default device
         }
         scs_log_(SCS_LOG_TYPE_message,
-                 (std::string("[ts-fmod-plugin] Found output device[") + std::to_string(i) + "] " + device_name).
+                 (std::string("[ts-fmod-plugin-v2] Found output device[") + std::to_string(i) + "] " + device_name).
                  c_str());
     }
-    scs_log_(SCS_LOG_TYPE_message, std::string("[ts-fmod-plugin] Selecting default output device (0)").c_str());
+    scs_log_(SCS_LOG_TYPE_message, std::string("[ts-fmod-plugin-v2] Selecting default output device (0)").c_str());
 
     FMOD::Studio::Bank* bank;
 
@@ -129,7 +156,23 @@ bool fmod_manager::init()
     if (res != FMOD_OK)
     {
         std::stringstream ss;
-        ss << "[ts-fmod-plugin] Could not load the bank file 'master.bank', " <<
+        ss << "[ts-fmod-plugin-v2] Could not load the bank file 'master.bank', " <<
+            FMOD_ErrorString(res);
+        scs_log_(SCS_LOG_TYPE_error, ss.str().c_str());
+        return false;
+    }
+
+    auto master_strings_bank_path = plugin_files_dir;
+    master_strings_bank_path.append("master.strings.bank");
+
+    res = system_->loadBankFile(master_strings_bank_path.generic_u8string().c_str(),
+        FMOD_STUDIO_LOAD_BANK_NORMAL,
+        &bank);
+
+    if (res != FMOD_OK)
+    {
+        std::stringstream ss;
+        ss << "[ts-fmod-plugin-v2] Could not load the bank file 'master.strings.bank', " <<
             FMOD_ErrorString(res);
         scs_log_(SCS_LOG_TYPE_error, ss.str().c_str());
         return false;
@@ -148,17 +191,17 @@ bool fmod_manager::init()
     if (fmod_events_map_.find("engine/engine") == fmod_events_map_.end())
     {
         scs_log_(SCS_LOG_TYPE_warning,
-                 "[ts-fmod-plugin] Did not find an 'event:/engine/engine' event. You will not have engine sounds.");
+                 "[ts-fmod-plugin-v2] Did not find an 'event:/engine/engine' event. You will not have engine sounds.");
     }
     if (fmod_events_map_.find("engine/exhaust") == fmod_events_map_.end())
     {
         scs_log_(SCS_LOG_TYPE_warning,
-                 "[ts-fmod-plugin] Did not find an 'event:/engine/exhaust' event. You will not have exhaust sounds.");
+                 "[ts-fmod-plugin-v2] Did not find an 'event:/engine/exhaust' event. You will not have exhaust sounds.");
     }
     if (fmod_events_map_.find("engine/turbo") == fmod_events_map_.end())
     {
         scs_log_(SCS_LOG_TYPE_warning,
-                 "[ts-fmod-plugin] Did not find an 'event:/engine/turbo' event. You will not have turbo sounds.");
+                 "[ts-fmod-plugin-v2] Did not find an 'event:/engine/turbo' event. You will not have turbo sounds.");
     }
 
     //check navigation vocies was loaded
@@ -221,12 +264,12 @@ bool fmod_manager::init()
         if (navigation_event_error_count == navigation_events_count)
         {
             scs_log_(SCS_LOG_TYPE_warning,
-                     "[ts-fmod-plugin] Did not find any navigation event. You will not have navigation voices.");
+                     "[ts-fmod-plugin-v2] Did not find any navigation event. You will not have navigation voices.");
         }
         else if (log.length() > 1)
         {
             log = log.erase(log.length() - 1);
-            std::string err = "[ts-fmod-plugin] Did not find an navigation event. You will not have ( " + log +
+            std::string err = "[ts-fmod-plugin-v2] Did not find an navigation event. You will not have ( " + log +
                 " ) voices.";
             scs_log_(SCS_LOG_TYPE_warning,
                      err.c_str());
@@ -243,11 +286,13 @@ bool fmod_manager::init()
     set_bus_volume("outside/exterior/truck_engine", config->engine);
     set_bus_volume("outside/exterior/truck_exhaust", config->exhaust);
     set_bus_volume("outside/exterior/truck_turbo", config->turbo);
-    set_bus_volume("cabin/interior", config->interior);
+    set_bus_volume("cabin/interior", config->interior_buttons);
 
     set_bus_volume("outside", config->windows_closed);
+    set_bus_volume("outside/exterior", config->windows_closed);
     set_bus_volume("exterior", config->windows_closed); // backward compatibility for 1.37 sound mods
     set_bus_volume("game/navigation", config->navigation);
+    set_bus_volume("game/ui_music", config->menu_music);
 
     return true;
 }
@@ -257,7 +302,7 @@ bool fmod_manager::init_channels(const std::filesystem::path& plugin_files_dir)
     for (const std::string& bank_name : selected_bank_names_)
     {
         std::stringstream ss;
-        ss << "[ts-fmod-plugin] Loading the events and busses for '" << bank_name << "'";
+        ss << "[ts-fmod-plugin-v2] Loading the events and busses for '" << bank_name << "'";
         scs_log_(SCS_LOG_TYPE_message, ss.str().c_str());
 
         auto guids_file_path = plugin_files_dir;
@@ -265,7 +310,7 @@ bool fmod_manager::init_channels(const std::filesystem::path& plugin_files_dir)
 
         if (!exists(guids_file_path))
         {
-            scs_log_(SCS_LOG_TYPE_error, "[ts-fmod-plugin] Could not find the '*.bank.guids' file");
+            scs_log_(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not find the '*.bank.guids' file");
             return false;
         }
 
@@ -273,7 +318,7 @@ bool fmod_manager::init_channels(const std::filesystem::path& plugin_files_dir)
         std::string s_guid, channel_path;
         if (!guids_file.is_open())
         {
-            scs_log_(SCS_LOG_TYPE_error, "[ts-fmod-plugin] Could not read the '*.bank.guids' file");
+            scs_log_(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not read the '*.bank.guids' file");
             return false;
         }
 
@@ -285,7 +330,7 @@ bool fmod_manager::init_channels(const std::filesystem::path& plugin_files_dir)
                 if (fmod_events_map_.count(channel_name))
                 {
                     std::stringstream ss;
-                    ss << "[ts-fmod-plugin] The event '" << channel_name << "' is already loaded.";
+                    ss << "[ts-fmod-plugin-v2] The event '" << channel_name << "' is already loaded.";
                     scs_log_(SCS_LOG_TYPE_warning, ss.str().c_str());
                     continue;
                 }
@@ -294,12 +339,12 @@ bool fmod_manager::init_channels(const std::filesystem::path& plugin_files_dir)
                 if (event.create_event_instance() != FMOD_OK)
                 {
                     std::stringstream ss;
-                    ss << "[ts-fmod-plugin] Could not load event '" << channel_name << "'";
+                    ss << "[ts-fmod-plugin-v2] Could not load event '" << channel_name << "'";
                     scs_log_(SCS_LOG_TYPE_error, ss.str().c_str());
                     continue;
                 }
                 std::stringstream ss;
-                ss << "[ts-fmod-plugin] Loading event '" << channel_name << "'";
+                ss << "[ts-fmod-plugin-v2] Loading event '" << channel_name << "'";
                 scs_log_(SCS_LOG_TYPE_message, ss.str().c_str());
                 add_event(channel_name.c_str(), event);
             }
@@ -324,7 +369,51 @@ bool fmod_manager::init_channels(const std::filesystem::path& plugin_files_dir)
 
 void fmod_manager::set_paused(const bool state)
 {
-    pause_bus("", state); // pause/unpause the main bus ('bus:/')
+    pause_bus("outside/exterior/truck_engine", state);
+    pause_bus("outside/exterior/truck_exhaust", state);
+    pause_bus("outside/exterior/truck_turbo", state);
+    pause_bus("cabin/interior", state);
+
+    pause_bus("outside", state);
+    pause_bus("exterior", state); // backward compatibility for 1.37 sound mods
+    pause_bus("game/navigation", state);
+
+    set_event_state("music/main_menu", state); // play menu music sound
+}
+
+void fmod_manager::lowerVol(double volume) {
+    scs_log_(0, std::to_string(volume).c_str());
+
+    set_bus_volume("", volume);
+
+    if (volume > 0.002) {
+        volume = volume - 0.002;
+
+        std::future<void> future = std::async(std::launch::async, &fmod_manager::lowerVol, this, volume);
+
+        future.get();
+    }
+}
+
+bool muted = true;
+void fmod_manager::set_minimised(bool state)
+{
+    std::string bol = std::to_string(state).c_str();
+
+    if (state && !muted)
+    { 
+        //scs_log_(0, "lost focus");
+        pause_bus("", true);
+        //lowerVol(config->master);
+        muted = true;
+    }
+    else if (!state && muted)
+    {
+        //scs_log_(0, "gained focus");
+        pause_bus("", false);
+        //set_bus_volume("", config->master);
+        muted = false;
+    }
 }
 
 FMOD::Studio::Bus* fmod_manager::get_bus(const char* name)

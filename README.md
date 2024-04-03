@@ -1,16 +1,19 @@
-# FMOD sound plugin for ATS/ETS2
+# FMOD sound plugin for ATS/ETS2 
 
 A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can use FMOD sound mods.
 
 This is pretty useless in singleplayer because you could just load the mod directly in the game.<br>
 But since I'm mostly playing TruckersMP, where sound mods are not supported (which are much better than the base game sounds), this is something I kinda quickly put together after the broken sounds in 1.37 TruckersMP, and then didn't really update it once it worked except for fixing some bugs and making it compatible with the newer versions, so it is pretty basic.
-
 Currently this uses a mix of the telemetry channels provided by the SCS sdk and directly reading values from the game's memory.
 
-I'm not that great at c(++) and reverse engineering so it might just stay this way, and also with more reverse engineering making updating slower and more complicated.
+# Whats different in v2?
+- Added support for muting the audio when you alt tab
+- Added more features and sounds
+- improved config and useability
+- Fixed the echo effect in the origional version
+- Better cabin/exterior sound
 
 # Some limitations/issues
-- Will keep playing sound even when alt-tabbed.
 - Sound level/direction does not change with the camera, the sound is always as if you are in the truck looking forward, with the exception of interior sounds not being played when on an exterior camera.
 - You will need to mute or lower some of the in-game audio channels for your truck (or you will hear double audio).
 - Can (and most probably will) break and possibly crash your game with every major game update because it needs to read some values directly from memory, and this structure can change with updates.
@@ -18,8 +21,8 @@ I'm not that great at c(++) and reverse engineering so it might just stay this w
 - Probably some more that I forgot.
 
 # How to use
-Download the [latest release](https://github.com/dariowouters/ts-fmod-plugin/releases/latest), copy the `ts-fmod-plugin.dll` and the `ts-fmod-plugin` folder to `<game_install_location>/bin/win_x64/plugins`. (if the `plugins` folder does not exists, you can create one)<br>
-Copy the master.bank file from the Release for the specific game you are installing it to and copy it to the `ts-fmod-plugin` folder.
+Download the [latest release](https://github.com/Baldywaldy09/ts-fmod-plugin-v2/releases/latest), copy the `ts-fmod-plugin-v2.dll` and the `ts-fmod-plugin-v2` folder to `<game_install_location>/bin/win_x64/plugins`. (if the `plugins` folder does not exists, you can create one)<br>
+Copy the master.bank and master.strings.bank file from the Release for the specific game you are installing it to and copy it to the `ts-fmod-plugin` folder.
 
 Here's the correct folder structure:
 
@@ -29,17 +32,18 @@ Here's the correct folder structure:
 │   ... # hidden to keep this list smaller
 │
 └───plugins # create if not exists
-    │   ts-fmod-plugin.dll # copy from release
+    │   ts-fmod-plugin-v2.dll # copy from release
     │
-    └───ts-fmod-plugin # copy from release
+    └───ts-fmod-plugin-v2 # copy from release
             master.bank # copy from specific game folder in release
+            master.strings.bank
             selected.bank.txt # copy from release | edit text in file with sound mod filename(s) you want
             sound_levels.txt # copy from release | edit the sound levels to your liking
             the_sound_mod_you_want_to_use.bank # example of sound mod
             the_sound_mod_you_want_to_use.bank.guids # example of sound mod
 ```
 
-For any sound mods you want to add you have to copy the (usually located in `/sound/truck/`) `<sound_mod_name>.bank` and the `<sound_mod_name>.bank.guids` files from the mod to the `ts-fmod-plugin` folder, and then open the `selected.bank.txt` file in a text editor and change the text in the file to the filename of the mod (without the file extension).<br>
+For any sound mods you want to add you have to copy the (usually located in `/sound/truck/`) `<sound_mod_name>.bank` and the `<sound_mod_name>.bank.guids` files from the mod to the `ts-fmod-plugin-v2` folder, and then open the `selected.bank.txt` file in a text editor and change the text in the file to the filename of the mod.<br>
 So for example if the sound mod files are named `sound_mod.bank` and `sound_mod.bank.guids` you have to change the text in the `selected.bank.txt` file to `sound_mod`.
 
 You can load multiple sound banks at the same time by having the sound banks in selected.bank.txt each on a new line. These sound banks will be loaded top to bottom.
@@ -62,10 +66,12 @@ Events:
 - engine/engine
 - engine/exhaust
 - engine/turbo
+- engine/start_bad [added in v2]
 - interior/air_warning
 - interior/blinker_on (and off)
 - interior/stick_blinker (and off)
 - interior/stick_park_brake (and off)
+- interior/wiper_up (and down) [added in v2]
 - interior/stick_retarder
 - interior/stick_hazard_warning
 - interior/stick_high_beam
@@ -74,6 +80,8 @@ Events:
 - interior/stick_wipers
 - interior/window_move
 - interior/window_click
+- interior/wiper
+- interior/noise [added in v2]
 - and_then_exit_left
 - and_then_exit_right
 - and_then_go_straight
