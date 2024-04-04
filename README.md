@@ -36,7 +36,7 @@ Here's the correct folder structure:
     │
     └───ts-fmod-plugin-v2 # copy from release
             master.bank # copy from specific game folder in release
-            master.strings.bank
+            master.strings.bank # copy from specific game folder in release
             selected.bank.txt # copy from release | edit text in file with sound mod filename(s) you want
             sound_levels.txt # copy from release | edit the sound levels to your liking
             the_sound_mod_you_want_to_use.bank # example of sound mod
