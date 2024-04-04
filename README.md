@@ -80,7 +80,6 @@ Events:
 - interior/stick_wipers
 - interior/window_move
 - interior/window_click
-- interior/wiper
 - interior/noise [added in v2]
 - and_then_exit_left
 - and_then_exit_right
