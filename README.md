@@ -62,7 +62,7 @@ If you have the developer console enabled in-game you can switch sound mods with
 You can change the sound levels in the `sound_levels.txt` file, you will just kind of need to play with them until you get something you like. Again you can use the `sdk reload` console command after you've changed these to reload the plugin with these new values.
 
 # Supported FMOD events and parameters
-Events:
+Events: [Truck]
 - engine/engine
 - engine/exhaust
 - engine/turbo
@@ -81,6 +81,11 @@ Events:
 - interior/window_move
 - interior/window_click
 - interior/noise [added in v2]
+
+Events: [Other]
+- music/main_menu [added in v2]
+
+Events: [GPS]
 - and_then_exit_left
 - and_then_exit_right
 - and_then_go_straight

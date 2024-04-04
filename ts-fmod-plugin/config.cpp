@@ -35,7 +35,7 @@ void config::upgrade_to_v3(const json& j)
     read_value(j, "exhaust", &exhaust);
     read_value(j, "turbo", &turbo);
     read_value(j, "interior_buttons", &interior_buttons);
-    read_value(j, "exterior", &exterior);
+    read_value(j, "interior_engine_when_windows_closed", &windows_closed);
     read_value(j, "navigation", &navigation);
     read_value(j, "menu_music", &menu_music);
     read_value(j, "config_version", &version);
@@ -88,10 +88,9 @@ bool config::load_config()
             !read_value(j, "exhaust", &exhaust) ||
             !read_value(j, "turbo", &turbo) ||
             !read_value(j, "interior_buttons", &interior_buttons) ||
-            !read_value(j, "exterior", &exterior) ||
+            !read_value(j, "interior_engine_when_windows_closed", &windows_closed) ||
             !read_value(j, "navigation", &navigation) ||
-            !read_value(j, "menu_music", &menu_music) ||
-            !read_value(j, "test", &test))
+            !read_value(j, "menu_music", &menu_music))
         {
             scs_log_(SCS_LOG_TYPE_warning,
                      "[ts-fmod-plugin-v2] Found an incorrect setting in 'sound_levels.txt' file, resetting its value to default");
@@ -122,10 +121,9 @@ bool config::save_config()
         {"exhaust", exhaust},
         {"turbo", turbo},
         {"interior_buttons", interior_buttons},
-        {"exterior", exterior},
+        {"interior_engine_when_windows_closed", windows_closed},
         {"navigation", navigation},
         {"menu_music", menu_music},
-        {"test", test},
         {"config_version", version},
     };
 

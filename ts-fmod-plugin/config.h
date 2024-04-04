@@ -13,10 +13,9 @@ public:
     double exhaust = 0.25;
     double turbo = 0.25;
     double interior_buttons = 0.75;
-    double exterior = 0.5;
+    double windows_closed = 0.5;
     double navigation = 0.75;
     double menu_music = 0.5;
-    double test = 0.5;
     uint32_t version = 3;
 
 private:

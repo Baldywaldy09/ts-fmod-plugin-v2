@@ -31,14 +31,7 @@ namespace hooks
 
         // Mutes custom sounds //
         // TODO: Make it check if the custom sound was registed //
-        if (allowedEvents.find(event + " |") != string::npos)
-        {
-            sound_event->volume = 0;
-            stringstream ss;
-            ss << event << " [muted]";
-            core::g_instance->log(SCS_LOG_TYPE_warning, ss.str().c_str());
-        }
-        else core::g_instance->log(SCS_LOG_TYPE_warning, event.c_str());
+        if (allowedEvents.find(event + " |") != string::npos) sound_event->volume = 0;
 
         // Play the sound //
         if (customEvents.find(event + " |") != string::npos)

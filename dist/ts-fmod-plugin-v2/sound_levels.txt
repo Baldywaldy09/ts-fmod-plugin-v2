@@ -1,0 +1,11 @@
+{
+    "master": 1,
+    "engine": 0.7,
+    "exhaust": 0.7,
+    "turbo": 0.7,
+    "interior_buttons": 1,
+	"interior_engine_when_windows_closed": 0.7,
+    "navigation": 1,
+    "menu_music": 1,
+    "config_version": 3
+}

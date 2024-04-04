@@ -44,11 +44,7 @@ bool fmod_manager::load_selected_bank(const std::filesystem::path& plugin_files_
     while (std::getline(selected_bank_file, bank_name))
     {
         auto bank_file_path = plugin_files_dir;
-        if (bank_name._Starts_with("//") || bank_name == "")
-        {
-            scs_log_(0, "Skipping comment");
-        }
-        else
+        if (!bank_name._Starts_with("//") || bank_name != "")
         {
             if (bank_name.find(".bank") == std::string::npos) 
             { 
@@ -62,9 +58,6 @@ bool fmod_manager::load_selected_bank(const std::filesystem::path& plugin_files_
                 pos = bank_name.find(".bank", pos);
                 bank_name = bank_name.replace(pos, std::string(".bank").length(), "");
             }
-
-            scs_log_(0, bank_file_path.string().c_str());
-            scs_log_(0, bank_name.c_str());
 
             const auto res = system_->loadBankFile(
                 bank_file_path.generic_u8string().c_str(),
