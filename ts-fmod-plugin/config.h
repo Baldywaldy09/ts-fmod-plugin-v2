@@ -16,7 +16,6 @@ public:
     double windows_closed = 0.5;
     double navigation = 0.75;
     double menu_music = 0.5;
-    uint32_t version = 3;
 
 private:
     template <class T>

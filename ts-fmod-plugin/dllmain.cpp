@@ -50,7 +50,7 @@ bool is_window_moving = false;
 bool is_left_window_button_active = false;
 bool is_right_window_button_active = false;
 
-bool start_bad = true;
+bool start_bad = false;
 
 scs_telemetry_register_for_channel_t register_for_channel = nullptr;
 scs_telemetry_unregister_from_channel_t unregister_from_channel = nullptr;
@@ -69,6 +69,9 @@ bool should_engine_brake_sound_play()
 
 SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info, scs_context_t context)
 {
+
+
+
     const int nChars = 256;
     HWND handle;
     char Buff[nChars];
@@ -126,10 +129,9 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
                         fmod_manager_instance->set_event_parameter("engine/engine", "play", 0);
                         fmod_manager_instance->set_event_parameter("engine/exhaust", "play", 0);
                         fmod_manager_instance->set_event_parameter("engine/turbo", "play", 0);
+                        start_bad = false;
                     }
                     stored_engine_state = engine_state;
-
-                    if (start_bad && engine_state == 0) start_bad = false;
                 }
 
                 fmod_manager_instance->set_event_parameter("engine/engine",
@@ -257,10 +259,12 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
             if (interior->get_is_on_interior_cam())
             {
                 fmod_manager_instance->set_bus_volume("cabin/interior", fmod_manager_instance->config->interior_buttons);
+                fmod_manager_instance->set_bus_volume("cabin", fmod_manager_instance->config->windows_closed);
             }
             else
             {
                 fmod_manager_instance->set_bus_volume("cabin/interior", 0);
+                fmod_manager_instance->set_bus_volume("cabin", 0);
             }
 
             fmod_manager_instance->set_global_parameter("cabin_out", interior->get_cabin_out());
@@ -453,12 +457,12 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_in
         return SCS_RESULT_generic_error;
     }
 
-    g_core = new core(scs_log, fmod_manager_instance);
-    if (!g_core->init()) 
-    {
-        scs_log(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not create fmod hook");
-        return SCS_RESULT_generic_error;
-    }
+   // g_core = new core(scs_log, fmod_manager_instance);
+   // if (!g_core->init()) 
+   // {
+   //     scs_log(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not create fmod hook");
+   //     return SCS_RESULT_generic_error;
+   // }
 
     register_telem_channels();
 

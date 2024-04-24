@@ -25,26 +25,6 @@ bool config::read_value(const json& j, const char* key, T* out_value) const
     return true;
 }
 
-// version 1 sound volumes were divided by 2, from v2 this is no longer the case,
-// so save the halved values to the file so volumes from the plugin stay the same as before.
-// v3 - people should already be on v2 by now so the v2 sound half has been removed and replaced with the v3 config
-void config::upgrade_to_v3(const json& j)
-{
-    read_value(j, "master", &master);
-    read_value(j, "engine", &engine);
-    read_value(j, "exhaust", &exhaust);
-    read_value(j, "turbo", &turbo);
-    read_value(j, "interior_buttons", &interior_buttons);
-    read_value(j, "interior_engine_when_windows_closed", &windows_closed);
-    read_value(j, "navigation", &navigation);
-    read_value(j, "menu_music", &menu_music);
-    read_value(j, "config_version", &version);
-
-    version = 3;
-
-    save_config();
-}
-
 bool config::load_config()
 {
     if (!exists(config_path_))
@@ -74,28 +54,19 @@ bool config::load_config()
         return false;
     }
 
-    if (!read_value(j, "config_version", &version) || version < current_config_version_)
+    if (
+        !read_value(j, "Master", &master) ||
+        !read_value(j, "Navigation", &navigation) ||
+        !read_value(j, "Menu_Music", &menu_music) ||
+        !read_value(j["Truck"], "Engine", &engine) ||
+        !read_value(j["Truck"], "Exhaust", &exhaust) ||
+        !read_value(j["Truck"], "Turbo", &turbo) ||
+        !read_value(j["Interior"], "Interior_Sounds", &interior_buttons) ||
+        !read_value(j["Interior"], "Engine_Volume_When_Windows_Closed", &windows_closed))
     {
-        scs_log_(SCS_LOG_TYPE_message,
-                 "[ts-fmod-plugin-v2] Found older 'sound_levels.txt' version, upgrading to newer version");
-        upgrade_to_v3(j);
-    }
-    else
-    {
-        if (
-            !read_value(j, "master", &master) ||
-            !read_value(j, "engine", &engine) ||
-            !read_value(j, "exhaust", &exhaust) ||
-            !read_value(j, "turbo", &turbo) ||
-            !read_value(j, "interior_buttons", &interior_buttons) ||
-            !read_value(j, "interior_engine_when_windows_closed", &windows_closed) ||
-            !read_value(j, "navigation", &navigation) ||
-            !read_value(j, "menu_music", &menu_music))
-        {
-            scs_log_(SCS_LOG_TYPE_warning,
-                     "[ts-fmod-plugin-v2] Found an incorrect setting in 'sound_levels.txt' file, resetting its value to default");
-            save_config();
-        }
+        scs_log_(SCS_LOG_TYPE_warning,
+            "[ts-fmod-plugin-v2] Found an incorrect setting in 'sound_levels.txt' file, resetting its value to default");
+        save_config();
     }
 
 
@@ -115,16 +86,18 @@ bool config::save_config()
     }
 
     const nlohmann::ordered_json j = {
-
-        {"master", master},
-        {"engine", engine},
-        {"exhaust", exhaust},
-        {"turbo", turbo},
-        {"interior_buttons", interior_buttons},
-        {"interior_engine_when_windows_closed", windows_closed},
-        {"navigation", navigation},
-        {"menu_music", menu_music},
-        {"config_version", version},
+        {"Master", master},
+        {"Navigation", navigation},
+        {"Menu_Music", menu_music},
+        {"Truck", {
+            {"Engine", engine},
+            {"Exhaust", exhaust},
+            {"Turbo", turbo}
+        }},
+        {"Interior", {
+            {"Engine_Volume_When_Windows_Closed", windows_closed},
+            {"Interior_Sounds", interior_buttons}
+        }}
     };
 
     sound_levels_file << j.dump(4);

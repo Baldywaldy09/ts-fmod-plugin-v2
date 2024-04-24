@@ -7,10 +7,10 @@ But since I'm mostly playing TruckersMP, where sound mods are not supported (whi
 Currently this uses a mix of the telemetry channels provided by the SCS sdk and directly reading values from the game's memory.
 
 # Whats different in v2?
-- Added support for muting the audio when you alt tab
+- Added support for muting the audio when the game is running in the background [this cannot be dissabled]
 - Added more features and sounds
-- improved config and useability
-- Fixed the echo effect in the origional version
+- Improved config and useability
+- Fixed the echo effect in the original version
 - Better cabin/exterior sound
 
 # Some limitations/issues

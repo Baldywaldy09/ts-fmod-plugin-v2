@@ -28,11 +28,6 @@ namespace hooks
             event = event.erase(0, 1);
         }
 
-
-        // Mutes custom sounds //
-        // TODO: Make it check if the custom sound was registed //
-        if (allowedEvents.find(event + " |") != string::npos) sound_event->volume = 0;
-
         // Play the sound //
         if (customEvents.find(event + " |") != string::npos)
         {
@@ -45,6 +40,8 @@ namespace hooks
             if (event == "engine/start_bad") start_bad = true;
         }
 
+        scs_log(0, sound_event->soundref_path.str.c_str);
+        scs_log(0, sound_event->soundref_content.str.c_str);
         return original_sound_event_update(sound_event, stop, a3);
     }
 

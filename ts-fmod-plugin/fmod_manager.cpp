@@ -44,7 +44,7 @@ bool fmod_manager::load_selected_bank(const std::filesystem::path& plugin_files_
     while (std::getline(selected_bank_file, bank_name))
     {
         auto bank_file_path = plugin_files_dir;
-        if (!bank_name._Starts_with("//") || bank_name != "")
+        if (!bank_name._Starts_with("//") && bank_name != "")
         {
             if (bank_name.find(".bank") == std::string::npos) 
             { 
@@ -368,6 +368,7 @@ void fmod_manager::set_paused(const bool state)
     pause_bus("cabin/interior", state);
 
     pause_bus("outside", state);
+    pause_bus("outside/exterior", state);
     pause_bus("exterior", state); // backward compatibility for 1.37 sound mods
     pause_bus("game/navigation", state);
 
