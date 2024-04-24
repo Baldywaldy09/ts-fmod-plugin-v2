@@ -1,11 +1,14 @@
 {
-    "master": 1,
-    "engine": 0.7,
-    "exhaust": 0.7,
-    "turbo": 0.7,
-    "interior_buttons": 1,
-	"interior_engine_when_windows_closed": 0.7,
-    "navigation": 1,
-    "menu_music": 1,
-    "config_version": 3
+  "Master": 1,
+  "Navigation": 0.5,
+  "Menu_Music": 0.5,
+  "Truck": {
+    "Engine": 0.5,
+    "Exhaust": 0.5,
+    "Turbo": 0.5
+  },
+  "Interior": {
+    "Engine_Volume_When_Windows_Closed": 0.5,
+    "Interior_Sounds": 0.5
+  }
 }
