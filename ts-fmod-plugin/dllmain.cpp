@@ -49,8 +49,8 @@ bool is_air_pressure_warning_on = true;
 bool is_window_moving = false;
 bool is_left_window_button_active = false;
 bool is_right_window_button_active = false;
-
 bool start_bad = false;
+bool paused = true;
 
 scs_telemetry_register_for_channel_t register_for_channel = nullptr;
 scs_telemetry_unregister_from_channel_t unregister_from_channel = nullptr;
@@ -59,6 +59,7 @@ scs_telemetry_unregister_from_channel_t unregister_from_channel = nullptr;
 SCSAPI_VOID telemetry_pause(const scs_event_t event, const void* const event_info, scs_context_t context)
 {
     fmod_manager_instance->set_paused(event == SCS_TELEMETRY_EVENT_paused);
+    paused = event == SCS_TELEMETRY_EVENT_paused;
 }
 
 bool should_engine_brake_sound_play()
@@ -69,9 +70,6 @@ bool should_engine_brake_sound_play()
 
 SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info, scs_context_t context)
 {
-
-
-
     const int nChars = 256;
     HWND handle;
     char Buff[nChars];
@@ -104,6 +102,24 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
 
             if (game_actor != nullptr)
             {
+              /*  if (game_actor->current_camera == 1 && !paused)
+                {
+                    float volume = fmod_manager_instance->config->master;
+
+                    auto* cameraDisAddr = reinterpret_cast<float*>(*reinterpret_cast<uint64_t*>(*reinterpret_cast<uint64_t*>(*reinterpret_cast<uint64_t*>(game_base + 0x01D079E0) + 0x38) + 0x8) + 0x34C);
+                    if (cameraDisAddr == nullptr) { return; }
+
+                    float cameraDistance = *cameraDisAddr;
+
+                    volume -= (cameraDistance - 4.0f) * (volume - 0.5f) / (9.0f - 4.0f);
+
+                    scs_log(0, std::to_string(volume).c_str());
+
+                    fmod_manager_instance->set_bus_volume("", volume);
+                }
+                else fmod_manager_instance->set_bus_volume("", fmod_manager_instance->config->master);
+              */
+
                 const auto turbo_pressure = game_actor->get_turbo_pressure();
                 if (turbo_pressure >= 0 && turbo_pressure <= 1)
                 {
@@ -111,7 +127,8 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
                 }
 
                 const auto engine_state = game_actor->get_engine_state();
-                if (engine_state != stored_engine_state) // engine state changed TODO: Find start_bad
+                scs_log(0, std::to_string(engine_state).c_str());
+                if (engine_state != stored_engine_state)
                 {
                     if (!start_bad && engine_state > 0 && stored_engine_state == 0)
                     {
@@ -123,6 +140,8 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
 
                         fmod_manager_instance->set_event_parameter("engine/turbo", "play", 1);
                         fmod_manager_instance->set_event_state("engine/turbo", true);
+
+                        start_bad = false; // Setting `start_bad` to false well because if the engine is running then there is no start bad
                     }
                     else if (engine_state == 0 || engine_state == 3) // engine is no longer running
                     {
@@ -170,7 +189,7 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
 
                 if (game_actor->get_wiper_position() > 0 && game_actor->get_wiper_position() < 0.5)
                 {
-                    // scs does it where /wipers_up is called when its actually moving down
+                    // scs does it where `wipers_up` is called when its actually moving down
 
                     fmod_manager_instance->set_event_state("interior/wipers_up", false);
                     fmod_manager_instance->set_event_state("interior/wipers_down", true, true);
@@ -242,12 +261,17 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
                     "wnd_right",
                     window_pos.y);
 
-            if (common::cmpf(window_pos.x, 0) && common::cmpf(window_pos.y, 0) && interior->
-                get_is_camera_inside())
+            if (interior->get_is_camera_inside())
             {
-                fmod_manager_instance->set_bus_volume("outside", fmod_manager_instance->config->windows_closed);
-                fmod_manager_instance->set_bus_volume("outside/exterior", fmod_manager_instance->config->windows_closed);
-                fmod_manager_instance->set_bus_volume("exterior", fmod_manager_instance->config->windows_closed); // backward compatibility
+                auto window_volume = fmod_manager_instance->config->windows_closed;
+
+                if (window_volume >= 1.f)
+                {
+                    window_volume += 1;
+                }
+                fmod_manager_instance->set_bus_volume("outside", fmod_manager_instance->config->windows_closed + (1 - window_volume) * window_pos.x);
+                fmod_manager_instance->set_bus_volume("outside/exterior", fmod_manager_instance->config->windows_closed + (1 - window_volume) * window_pos.x);
+                fmod_manager_instance->set_bus_volume("exterior", fmod_manager_instance->config->windows_closed + (1 - window_volume) * window_pos.x); // backward compatibility
             }
             else
             {
@@ -259,12 +283,10 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
             if (interior->get_is_on_interior_cam())
             {
                 fmod_manager_instance->set_bus_volume("cabin/interior", fmod_manager_instance->config->interior_buttons);
-                fmod_manager_instance->set_bus_volume("cabin", fmod_manager_instance->config->windows_closed);
             }
             else
             {
                 fmod_manager_instance->set_bus_volume("cabin/interior", 0);
-                fmod_manager_instance->set_bus_volume("cabin", 0);
             }
 
             fmod_manager_instance->set_global_parameter("cabin_out", interior->get_cabin_out());
@@ -457,12 +479,12 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_in
         return SCS_RESULT_generic_error;
     }
 
-   // g_core = new core(scs_log, fmod_manager_instance);
-   // if (!g_core->init()) 
-   // {
-   //     scs_log(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not create fmod hook");
-   //     return SCS_RESULT_generic_error;
-   // }
+  //  g_core = new core(scs_log, fmod_manager_instance);
+  //  if (!g_core->init()) 
+  //  {
+  //      scs_log(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not create fmod hook");
+  //      return SCS_RESULT_generic_error;
+  //  }
 
     register_telem_channels();
 

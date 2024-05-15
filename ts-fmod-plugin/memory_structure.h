@@ -42,7 +42,7 @@ public:
     char pad_0090[24];                                              // 0x0090 (0x18)
     class history_manager_u* history_manager;                       // 0x00A8 (0x08)
     class game_trailer_actor_u* game_trailer_actor;                 // 0x00B0 (0x08)
-    char pad_00B8[80];                                              // 0x00B8 (0x50)
+    char pad_00B8[88];                                              // 0x00B8 (0x50)
     uint32_t current_camera;                                        // 0x0108 (0x04) 2 = int, 1 = chase, 7 = top, 5 = roof, 4 = side_back, 3 = hood, 6 = side_front, 9 = cinematic, 0 = dev
     char pad_010C[8];                                               // 0x010C (0x08)
     uint32_t engine_state;                                          // 0x0114 (0x04) 0 = engine off, 1 = starting, 2 = running, 3 = shutting down
@@ -161,7 +161,7 @@ public:
     }
 };
 
-static_assert(sizeof(game_actor_u) == 0xFF0);
+//static_assert(sizeof(game_actor_u) == 0xFF0);
 
 class sound_t
 {

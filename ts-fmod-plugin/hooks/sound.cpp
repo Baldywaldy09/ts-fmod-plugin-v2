@@ -20,6 +20,11 @@ namespace hooks
 
     bool detoured_sound_event_update(prism::sound_event_t* sound_event, const bool stop, const int64_t a3)
     {
+        if (core::g_instance->get_fmod_manager() == nullptr) {
+            core::g_instance->log(2, "[ts-fmod-plugin-v2] `fmod_manager` doesnt exist!");
+            return original_sound_event_update(sound_event, stop, a3);
+        }
+
         string soundRef = sound_event->soundref_content.str.c_str;
         string event;
         size_t pos = soundRef.find('#');
