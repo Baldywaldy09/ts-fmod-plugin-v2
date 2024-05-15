@@ -45,8 +45,6 @@ namespace hooks
             if (event == "engine/start_bad") start_bad = true;
         }
 
-        scs_log(0, sound_event->soundref_path.str.c_str);
-        scs_log(0, sound_event->soundref_content.str.c_str);
         return original_sound_event_update(sound_event, stop, a3);
     }
 

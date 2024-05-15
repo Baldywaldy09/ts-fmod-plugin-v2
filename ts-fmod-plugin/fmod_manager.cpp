@@ -282,7 +282,7 @@ bool fmod_manager::init()
     set_bus_volume("cabin/interior", config->interior_buttons);
 
     set_bus_volume("outside", config->windows_closed);
-    set_bus_volume("outside/exterior", config->windows_closed);
+   // set_bus_volume("outside/exterior", config->windows_closed);
     set_bus_volume("exterior", config->windows_closed); // backward compatibility for 1.37 sound mods
     set_bus_volume("game/navigation", config->navigation);
     set_bus_volume("game/ui_music", config->menu_music);

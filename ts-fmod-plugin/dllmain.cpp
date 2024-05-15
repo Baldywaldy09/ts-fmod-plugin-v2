@@ -86,11 +86,13 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
     if (allowed_windows.find(current_window) != allowed_windows.end()) fmod_manager_instance->set_minimised(false);
     else fmod_manager_instance->set_minimised(true);
 
+
     fmod_manager_instance->set_event_parameter("engine/engine", "rpm", telemetry_data.rpm);
     fmod_manager_instance->set_event_parameter("engine/exhaust", "rpm", telemetry_data.rpm);
     fmod_manager_instance->set_event_parameter("engine/engine", "load", telemetry_data.effective_throttle);
     // The game might use some other value, but this seems close enough
     fmod_manager_instance->set_event_parameter("engine/exhaust", "load", telemetry_data.effective_throttle);
+
 
     if (base_ctrl_ptr != NULL)
     {
@@ -99,6 +101,7 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
             const auto base_ctrl_address = *reinterpret_cast<uint64_t*>(base_ctrl_ptr);
             const auto game_actor_ptr = base_ctrl_address + game_actor_offset;
             const auto* game_actor = *reinterpret_cast<game_actor_u**>(game_actor_ptr);
+
 
             if (game_actor != nullptr)
             {
@@ -127,7 +130,6 @@ SCSAPI_VOID telemetry_tick(const scs_event_t event, const void* const event_info
                 }
 
                 const auto engine_state = game_actor->get_engine_state();
-                scs_log(0, std::to_string(engine_state).c_str());
                 if (engine_state != stored_engine_state)
                 {
                     if (!start_bad && engine_state > 0 && stored_engine_state == 0)
@@ -479,12 +481,12 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version, const scs_telemetry_in
         return SCS_RESULT_generic_error;
     }
 
-  //  g_core = new core(scs_log, fmod_manager_instance);
-  //  if (!g_core->init()) 
-  //  {
-  //      scs_log(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not create fmod hook");
-  //      return SCS_RESULT_generic_error;
-  //  }
+    g_core = new core(scs_log, fmod_manager_instance);
+    if (!g_core->init()) 
+    {
+        scs_log(SCS_LOG_TYPE_error, "[ts-fmod-plugin-v2] Could not create fmod hook");
+        return SCS_RESULT_generic_error;
+    }
 
     register_telem_channels();
 

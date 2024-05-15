@@ -219,7 +219,7 @@ class unk_interior // still need to figure out what this actually is
     float cabin_out;                                      // 0x00C0 (0x04)
     char pad_00C0[28];                                    // 0x00C4 (0x1c)
     vec2s_t window_state;                                 // 0x00E0 (0x08) 0 = closed, 1 = open
-    char pad_00E8[1648];                                  // 0x00E8 (0x670)
+    char pad_00E8[1656];                                  // 0x00E8 (0x670)
     navigation_voice_event* now_playing_navigation_sound; // 0x0758 (0x08)
     char pad_0768[96];                                    // 0x0760 (0x60)
     navigation_voice_event** navigation_sound_events;     // 0x07C0 (0x08)
