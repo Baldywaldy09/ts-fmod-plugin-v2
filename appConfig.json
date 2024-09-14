@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
-  "downloadURL": "https://sharemods.com/ryq4hye4wdkx/ts-fmod-plugin-v2.zip.html",
+  "version": "1.0.2",
+  "downloadURL": "https://sharemods.com/4e99494gphyq/TS-FMOD_V2_Config_Manager.zip.html",
   "changeLog": "- Added auto game path finder\n- Added Change Log to update message\n- Fixed incorrect ETS2 truck names\n- Added new ATS truck: Mack Pinnacle\n- Fixed general bugs"
 }
