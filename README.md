@@ -1,4 +1,4 @@
-# TS-FMOD-Plugin Improved - ETS2 / ATS
+# TS-FMOD-Plugin Improved/V2 - ETS2 / ATS
 
 A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can use FMOD sound mods.
 
@@ -11,18 +11,18 @@ A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can u
 - Much more (continue reading below)
 
 # How to use
-1.) Open Steam
-2.) Right click ETS2/ATS and go to `Manage > Browse Local Files`
-3.) Open `Bin > win_x64`
-4.) Download the plugin (https://github.com/Baldywaldy09/ts-fmod-plugin-v2/releases/latest)
-5.) Inside the downloaded zip extract the folder `plugins` into the folder you opened earlier
-6.) Download any sound mods you would like to use
-7.) Extract the `.bank` and `.bank.guids` from the .zip/.scs file usually located in: `/sound/truck/` [these files can be placed anywhere]
-8.) Back inside the plugin zip extract the folder `Config App`
-9.) Open the `.exe` file inside and and select your game [top right]
-10.) Press "Add Truck" and add the truck you want to add this sound to
-11.) Select the new truck and press "Add New Bank" and locate the `.bank` file you extracted earlier
-12.) Open/Restart your game and the sound should be applied
+1.) Open Steam<br>
+2.) Right click ETS2/ATS and go to `Manage > Browse Local Files`<br>
+3.) Open `Bin > win_x64`<br>
+4.) Download the plugin (https://github.com/Baldywaldy09/ts-fmod-plugin-v2/releases/latest)<br>
+5.) Inside the downloaded zip extract the folder `plugins` into the folder you opened earlier<br>
+6.) Download any sound mods you would like to use<br>
+7.) Extract the `.bank` and `.bank.guids` from the .zip/.scs file usually located in: `/sound/truck/` [these files can be placed anywhere]<br>
+8.) Back inside the plugin zip extract the folder `Config App`<br>
+9.) Open the `.exe` file inside and and select your game [top right]<br>
+10.) Press "Add Truck" and add the truck you want to add this sound to<br>
+11.) Select the new truck and press "Add New Bank" and locate the `.bank` file you extracted earlier<br>
+12.) Open/Restart your game and the sound should be applied<br>
 
 ### Some extra info
 - Any bank files on the truck: "global" will be applied to all trucks, this can be used for things like navigation sounds
