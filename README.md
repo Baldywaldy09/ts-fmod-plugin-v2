@@ -3,7 +3,7 @@
 A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can use FMOD sound mods.
 
 # Whats different in v2?
-- Added support for muting the audio when the game is running in the background [this cannot be disabled]
+- Added support for muting the audio when the game is running in the background [this can be disabled]
 - Added more features and sounds
 - Improved config and useability
 - Fixed the echo effect in the original version
