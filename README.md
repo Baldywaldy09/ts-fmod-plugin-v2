@@ -1,10 +1,6 @@
-# FMOD sound plugin for ATS/ETS2 
+# TS-FMOD-Plugin Improved - ETS2 / ATS
 
 A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can use FMOD sound mods.
-
-This is pretty useless in singleplayer because you could just load the mod directly in the game.<br>
-But since I'm mostly playing TruckersMP, where sound mods are not supported (which are much better than the base game sounds), this is something I kinda quickly put together after the broken sounds in 1.37 TruckersMP, and then didn't really update it once it worked except for fixing some bugs and making it compatible with the newer versions, so it is pretty basic.
-Currently this uses a mix of the telemetry channels provided by the SCS sdk and directly reading values from the game's memory.
 
 # Whats different in v2?
 - Added support for muting the audio when the game is running in the background [this cannot be disabled]
@@ -12,54 +8,25 @@ Currently this uses a mix of the telemetry channels provided by the SCS sdk and 
 - Improved config and useability
 - Fixed the echo effect in the original version
 - Better cabin/exterior sound
-
-# Some limitations/issues
-- Sound level/direction does not change with the camera, the sound is always as if you are in the truck looking forward, with the exception of interior sounds not being played when on an exterior camera.
-- You will need to mute or lower some of the in-game audio channels for your truck (or you will hear double audio).
-- Can (and most probably will) break and possibly crash your game with every major game update because it needs to read some values directly from memory, and this structure can change with updates.
-- Only very basic volume control (might look into something better/easier in the future).
-- Probably some more that I forgot.
+- Much more (continue reading below)
 
 # How to use
-Download the [latest release](https://github.com/Baldywaldy09/ts-fmod-plugin-v2/releases/latest), copy the `ts-fmod-plugin-v2.dll` and the `ts-fmod-plugin-v2` folder to `<game_install_location>/bin/win_x64/plugins`. (if the `plugins` folder does not exists, you can create one)<br>
-Copy the master.bank and master.strings.bank file from the Release for the specific game you are installing it to and copy it to the `ts-fmod-plugin` folder.
-
-Here's the correct folder structure:
-
-```python
-<game_install_location>/bin/win_x64/
-│   eurotrucks2.exe # or amtrucks.exe for ATS
-│   ... # hidden to keep this list smaller
-│
-└───plugins # create if not exists
-    │   ts-fmod-plugin-v2.dll # copy from release
-    │
-    └───ts-fmod-plugin-v2 # copy from release
-            master.bank # copy from specific game folder in release
-            master.strings.bank # copy from specific game folder in release
-            selected.bank.txt # copy from release | edit text in file with sound mod filename(s) you want
-            sound_levels.txt # copy from release | edit the sound levels to your liking
-            the_sound_mod_you_want_to_use.bank # example of sound mod
-            the_sound_mod_you_want_to_use.bank.guids # example of sound mod
-```
-
-For any sound mods you want to add you have to copy the (usually located in `/sound/truck/`) `<sound_mod_name>.bank` and the `<sound_mod_name>.bank.guids` files from the mod to the `ts-fmod-plugin-v2` folder, and then open the `selected.bank.txt` file in a text editor and change the text in the file to the filename of the mod.<br>
-So for example if the sound mod files are named `sound_mod.bank` and `sound_mod.bank.guids` you have to change the text in the `selected.bank.txt` file to `sound_mod`.
-
-You can load multiple sound banks at the same time by having the sound banks in selected.bank.txt each on a new line. These sound banks will be loaded top to bottom.
-If multiple sound banks include the same sound event it will only load the event from the first sound bank.
-
-Now you can load the game and the sound should work when you start your truck.
+1.) Open Steam
+2.) Right click ETS2/ATS and go to `Manage > Browse Local Files`
+3.) Open `Bin > win_x64`
+4.) Download the plugin (https://github.com/Baldywaldy09/ts-fmod-plugin-v2/releases/latest)
+5.) Inside the downloaded zip extract the folder `plugins` into the folder you opened earlier
+6.) Download any sound mods you would like to use
+7.) Extract the `.bank` and `.bank.guids` from the .zip/.scs file usually located in: `/sound/truck/` [these files can be placed anywhere]
+8.) Back inside the plugin zip extract the folder `Config App`
+9.) Open the `.exe` file inside and and select your game [top right]
+10.) Press "Add Truck" and add the truck you want to add this sound to
+11.) Select the new truck and press "Add New Bank" and locate the `.bank` file you extracted earlier
+12.) Open/Restart your game and the sound should be applied
 
 ### Some extra info
-
-You will generally need to mute/lower the truck engine, exhaust and turbo sound channels in the in-game settings to prevent double sounds. If the sound mod you're using includes interior sounds you will also have to mute/lower them in-game.
-
-For using navigation sound mods you have to have the voice navigation enabled (with a voice pack selected) in the game settings, but the 'Voice navigation volume' needs to be muted.
-
-If you have the developer console enabled in-game you can switch sound mods without restarting by changing the filename in `selected.bank.txt` and then in the game console enter `sdk reload`. This will reload all telemetry plugins and cause this plugin to load the newly selected sound mod.
-
-You can change the sound levels in the `sound_levels.txt` file, you will just kind of need to play with them until you get something you like. Again you can use the `sdk reload` console command after you've changed these to reload the plugin with these new values.
+- Any bank files on the truck: "global" will be applied to all trucks, this can be used for things like navigation sounds
+- Use the in-game volume slider to adjust the volume of this plugin
 
 # Supported FMOD events and parameters
 Events: [Truck]
@@ -67,6 +34,13 @@ Events: [Truck]
 - engine/exhaust
 - engine/turbo
 - engine/start_bad [added in v2]
+- effects/air_brake [added in v2]
+- effects/hook_attach [added in v2]
+- effects/hook_detach [added in v2]
+- effects/air_gear [added in v2]
+- effects/gear_wrong [added in v2]
+- effects/gear_grind [added in v2]
+- effects/reverse [added in v2]
 - interior/air_warning
 - interior/blinker_on (and off)
 - interior/stick_blinker (and off)
@@ -81,6 +55,9 @@ Events: [Truck]
 - interior/window_move
 - interior/window_click
 - interior/noise [added in v2]
+- interior/system_warning1 *[Lane Assist Beep]* [added in v2]
+- interior/system_warning2 [added in v2]
+- interior/system_warning3 [added in v2]
 
 Events: [Other]
 - music/main_menu [added in v2]
@@ -134,3 +111,8 @@ Parameters:
 - surr_type
 - cabin_rot
 - cabin_out
+- trans_rpm [added in v2]
+- cabin_type *Value will always be `1`* [added in v2]
+- daytime [added in v2]
+- air_pressure [added in v2]
+- park_brake [added in v2]
