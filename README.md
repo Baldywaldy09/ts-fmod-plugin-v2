@@ -1,6 +1,9 @@
 # TS-FMOD-Plugin Improved/V2 - ETS2 / ATS
-
 A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can use FMOD sound mods.
+
+> [!IMPORTANT]
+> Every major ETS2 / ATS Update [1.??] this plugin will need to be updated<br>
+> Update time depends on how busy i am and how much has changed
 
 # Whats different in v2?
 - Added support for muting the audio when the game is running in the background [this can be disabled]
@@ -24,9 +27,9 @@ A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can u
 11.) Select the new truck and press "Add New Bank" and locate the `.bank` file you extracted earlier<br>
 12.) Open/Restart your game and the sound should be applied<br>
 
-### Some extra info
-- Any bank files on the truck: "global" will be applied to all trucks, this can be used for things like navigation sounds
-- Use the in-game volume slider to adjust the volume of this plugin
+> [!NOTE]
+> Any bank files on the truck: "global" will be applied to all trucks, this can be used for things like navigation sounds<br>
+> Use the in-game volume slider to adjust the volume of this plugin
 
 # Supported FMOD events and parameters
 Events: [Truck]
