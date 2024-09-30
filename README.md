@@ -1,4 +1,4 @@
-# TS-FMOD-Plugin Improved/V2 - ETS2 / ATS
+# TS-FMOD-Plugin Improved/V2 - ETS2 / ATS - 1.51
 A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can use FMOD sound mods.
 
 > [!IMPORTANT]
