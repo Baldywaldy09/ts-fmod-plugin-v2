@@ -1,6 +1,8 @@
 # TS-FMOD-Plugin Improved/V2 - ETS2 / ATS - 1.51
 A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can use FMOD sound mods.
 
+#### The code of this fork is now private | Why? It uses a lot of memory editing and contains code that can be easily manipulated for other things such as hacks<br>
+
 > [!IMPORTANT]
 > Every major ETS2 / ATS Update [1.??] this plugin will need to be updated<br>
 > Update time depends on how busy i am and how much has changed
