@@ -6,6 +6,7 @@
   },
   "plugin": {
     "latestVersion": "1.51.1",
+    "latestVersion": "187E03AEB33FC5CA7209B15AB969BC41"
     "downloadURL": "https://sharemods.com/yje4iieysadb/ts-fmod-plugin-v2-1.51.zip.html",
     "changeLog": "- Fixed TruckersMP Unload Crash"
   }
