@@ -5,7 +5,7 @@
     "changeLog": ""
   },
   "plugin": {
-    "latestVersion": "1.53",
-    "changeLog": "- Updated to game version 1.53"
+    "latestVersion": "1.52",
+    "changeLog": "- Updated to game version 1.52\n- Added message box to outdated version message"
   }
 }
