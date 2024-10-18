@@ -5,8 +5,7 @@
     "changeLog": ""
   },
   "plugin": {
-    "latestVersion": "1.51.1",
-    "downloadURL": "https://sharemods.com/yje4iieysadb/ts-fmod-plugin-v2-1.51.zip.html",
-    "changeLog": "- Fixed TruckersMP Unload Crash"
+    "latestVersion": "1.53",
+    "changeLog": "- Updated to game version 1.53"
   }
 }
