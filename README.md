@@ -8,11 +8,17 @@ A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can u
 > Update time depends on how busy i am and how much has changed
 
 # Whats different in v2?
-- Added support for muting the audio when the game is running in the background [this can be disabled]
-- Added more features and sounds
-- Improved config and useability
-- Fixed the echo effect in the original version
-- Better cabin/exterior sound
+- Volume level control is now done in-game | removed sound_levels.txt
+- Low air sound wont play if you have "Air brakes simulation" disabled
+- Reverse sound wont play if you have "Back-up beeper" disabled
+- Sound will play in background if you have "Play sound when the game is in background" enabled
+- Automatic game sound settings control
+- Use of navigation voices and menu music will now be determined by the value they were in your settings
+- Feature to allow multiple bank files for multiple trucks at one
+- "Directional" audio
+- Volume fade-out on game loosing focus
+- Improved cabin sound
+- Automatic master.bank handling
 - Much more (continue reading below)
 
 # How to use
