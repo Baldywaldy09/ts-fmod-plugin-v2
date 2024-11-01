@@ -1,4 +1,5 @@
 {
+  "bypass": false,
   "app": {
     "latestVersion": "1.1.0",
     "downloadURL": "",
