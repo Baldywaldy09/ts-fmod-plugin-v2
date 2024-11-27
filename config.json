@@ -6,7 +6,7 @@
     "changeLog": ""
   },
   "plugin": {
-    "latestVersion": "1.52",
-    "changeLog": "- Updated to game version 1.52\n- Added message box to outdated version message"
+    "latestVersion": "1.53",
+    "changeLog": "- Fixed interior sounds\n  - Interior sound will now follow scs `game_data.sii` settings:\n    - `interior_sound_volume: 0.05` // Interior sound attenuation value (the outside sounds will have 5% of original volume)\n- Fixed retarder level stick not playing a sound on every click"
   }
 }
