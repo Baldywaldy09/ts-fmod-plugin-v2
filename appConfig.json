@@ -1,5 +1,5 @@
 {
-  "version": "1.0.2",
-  "downloadURL": "https://sharemods.com/4e99494gphyq/TS-FMOD_V2_Config_Manager.zip.html",
-  "changeLog": "- Added auto game path finder\n- Added Change Log to update message\n- Fixed incorrect ETS2 truck names\n- Added new ATS truck: Mack Pinnacle\n- Fixed general bugs"
+  "version": "1.1.0",
+  "downloadURL": "https://sharemods.com/u9yo5jzwnhd2/TS-FMOD_V2_Manager_-_v1.1.0.zip.html",
+  "changeLog": "- Full rework\n- Fixed not opening on some windows 11 installs\n- Added actual error handling\n- Automatic plugin repair, installs and updates\n- Reworked UI\n  - Added main menu\n  - Reworked \"sound manager\"\n  - Remade truck adder screen\n  - Added settings page"
 }
