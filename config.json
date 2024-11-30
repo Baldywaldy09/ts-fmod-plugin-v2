@@ -3,10 +3,10 @@
   "app": {
     "latestVersion": "1.1.0",
     "downloadURL": "",
-    "changeLog": ""
+    "changeLog": "- Full rework\n- Fixed not opening on some windows 11 installs\n- Added actual error handling\n- Automatic plugin repair, installs and updates\n- Reworked UI\n  - Added main menu\n  - Reworked \"sound manager\"\n  - Remade truck adder screen\n  - Added settings page"
   },
   "plugin": {
-    "latestVersion": "1.53",
-    "changeLog": "- Fixed interior sounds\n  - Interior sound will now follow scs `game_data.sii` settings:\n    - `interior_sound_volume: 0.05` // Interior sound attenuation value (the outside sounds will have 5% of original volume)\n- Fixed retarder level stick not playing a sound on every click"
+    "latestVersion": "1.53.1",
+    "changeLog": "- Fixed bank unload crash if the file is missing (invalid handling fix)\n- Fixed some mercedes interior sounds not being handled correctly\n- Fixed retarder level stick not playing a sound on every click"
   }
 }
