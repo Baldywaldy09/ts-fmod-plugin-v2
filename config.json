@@ -2,7 +2,7 @@
   "bypass": false,
   "app": {
     "latestVersion": "1.1.0",
-    "downloadURL": "https://sharemods.com/1a1dlkp72q6c/TS-FMOD_V2_Manager_-_v1.1.0.zip.html",
+    "downloadURL": "https://sharemods.com/u9yo5jzwnhd2/TS-FMOD_V2_Manager_-_v1.1.0.zip.html",
     "changeLog": "- Full rework\n- Fixed not opening on some windows 11 installs\n- Added actual error handling\n- Automatic plugin repair, installs and updates\n- Reworked UI\n  - Added main menu\n  - Reworked \"sound manager\"\n  - Remade truck adder screen\n  - Added settings page"
   },
   "plugin": {
