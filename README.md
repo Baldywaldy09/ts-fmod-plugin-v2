@@ -1,4 +1,4 @@
-# TS-FMOD-Plugin Improved/V2 - ETS2 / ATS - 1.51
+# TS-FMOD-Plugin Improved/V2 - ETS2 / ATS - 1.53
 A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can use FMOD sound mods.
 
 #### The code of this fork is now private | Why? It uses a lot of memory editing and contains code that can be easily manipulated for other things such as hacks<br>
@@ -22,6 +22,8 @@ A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can u
 - Much more (continue reading below)
 
 # How to use
+**Video Guide: https://www.youtube.com/watch?v=vHKzcb8lHWo**
+
 1.) Open Steam<br>
 2.) Right click ETS2/ATS and go to `Manage > Browse Local Files`<br>
 3.) Open `Bin > win_x64`<br>
