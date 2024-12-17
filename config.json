@@ -1,9 +1,9 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.1.0",
-    "downloadURL": "https://sharemods.com/u9yo5jzwnhd2/TS-FMOD_V2_Manager_-_v1.1.0.zip.html",
-    "changeLog": "- Full rework\n- Fixed not opening on some windows 11 installs\n- Added actual error handling\n- Automatic plugin repair, installs and updates\n- Reworked UI\n  - Added main menu\n  - Reworked \"sound manager\"\n  - Remade truck adder screen\n  - Added settings page"
+    "latestVersion": "1.1.1",
+    "downloadURL": "https://modsfire.com/ESFs2299c02X7WJ",
+    "changeLog": "- Added support for `Iveco S-Way`\n- Added support for `Volvo FH3`\n- Added support for `Volvo FH4`\n- Added support for `Volvo FH5`\n- Added support for `Volvo FH6`\n- Fixed problem where some users where unable to remove certian bank files\n- Possible fix for app not handling bank paths correctly"
   },
   "plugin": {
     "latestVersion": "1.53.1",
