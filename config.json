@@ -1,9 +1,9 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.1.1",
-    "downloadURL": "https://modsfire.com/ESFs2299c02X7WJ",
-    "changeLog": "- Added support for `Iveco S-Way`\n- Added support for `Volvo FH3`\n- Added support for `Volvo FH4`\n- Added support for `Volvo FH5`\n- Added support for `Volvo FH6`\n- Fixed problem where some users where unable to remove certian bank files\n- Possible fix for app not handling bank paths correctly"
+    "latestVersion": "1.1.2",
+    "downloadURL": "https://modsfire.com/56cj5q4C3L25XfG",
+    "changeLog": "- Fixed config failing to create\n- Fixed config setup giving random popups"
   },
   "plugin": {
     "latestVersion": "1.53.1",
