@@ -6,7 +6,7 @@
     "changeLog": "- Fixed config failing to create\n- Fixed config setup giving random popups"
   },
   "plugin": {
-    "latestVersion": "1.53.1",
-    "changeLog": "- Fixed bank unload crash if the file is missing (invalid handling fix)\n- Fixed some mercedes interior sounds not being handled correctly\n- Fixed retarder level stick not playing a sound on every click"
+    "latestVersion": "1.54",
+    "changeLog": "- Updated to 1.54\n- Prism3D Reversed code full rework\n- New interior sound \"deadening\"\n  - BETA - Soon will impliment the option to disable it\n- Reworked/Fixed window sounds\n- Fixed wiper sounds being backwards\n- Fixed bank unloading\n- Auto engine restart if failed (prevents so engine sound playing when there should)\n  - Sometimes happens if you restart the engine too quick"
   }
 }
