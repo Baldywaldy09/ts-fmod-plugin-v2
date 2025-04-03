@@ -1,9 +1,9 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.1.2",
-    "downloadURL": "https://modsfire.com/RCG8166aciuT9rX",
-    "changeLog": "- Fixed config failing to create\n- Fixed config setup giving random popups"
+    "latestVersion": "1.1.3",
+    "downloadURL": "https://modsfire.com/K76Ur4ryBQFC43X",
+    "changeLog": "- Fixed game crashing caused by app"
   },
   "plugin": {
     "latestVersion": "1.54",
