@@ -1,9 +1,9 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.1.4",
-    "downloadURL": "https://modsfire.com/AG0KAaeQ79bpxbi",
-    "changeLog": "- Support for plugin 1.54.1\n- Fixed double error logging\n- *Possible* fix for json errors"
+    "latestVersion": "1.1.5",
+    "downloadURL": "https://modsfire.com/kAkHzmfy5F4RqeW",
+    "changeLog": "- Added log file: (`%localappdata%/ts-fmod-plugin-v2/log.txt`)\n- Added more information to errors\n- General bug fixes"
   },
   "plugin": {
     "latestVersion": "1.54.1",
