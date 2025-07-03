@@ -1,12 +1,12 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.1.5",
-    "downloadURL": "https://modsfire.com/GsirGPnLNhwsU5t",
-    "changeLog": "- Added log file: (`%localappdata%/ts-fmod-plugin-v2/log.txt`)\n- Added more information to errors\n- General bug fixes"
+    "latestVersion": "1.1.6",
+    "downloadURL": "https://modsfire.com/tEnut5qPW60ygOr",
+    "changeLog": "- Support for plugin 1.55"
   },
   "plugin": {
-    "latestVersion": "1.54.1",
-    "changeLog": "- **Support for Snowy moon**\n- Updated Prism3D Code\n  - Updated `array_dyn_t`\n  - Implemented `prism::sound_event_t`\n- Removed useless pattern scans\n  - Faster loading time\n- Sound deadening is now disabled by default\n  - Enable it with the startup arg `-tsfmodexperimental` (In the TruckersMP app for TMP | In Steam for Singleplayer)\n- Fixed problem with extra loud sound\n- Fixed unsupported sounds being muted\n  - You should now hear suspension air sound (`event:effects/lift_axle`)"
+    "latestVersion": "1.55",
+    "changeLog": "- Support for ETS2 1.55 + ATS 1.55\n- Fixed issue with double reverse sound\n- Made 'cvar' code actaully correct\n- Fixed 'engine failed to start' so now it actually forces a start"
   }
 }
