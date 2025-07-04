@@ -1,9 +1,9 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.1.6",
-    "downloadURL": "https://modsfire.com/tEnut5qPW60ygOr",
-    "changeLog": "- Support for plugin 1.55"
+    "latestVersion": "1.1.7",
+    "downloadURL": "https://modsfire.com/ZWsyXu72732PJ5s",
+    "changeLog": "- Feature to downgrade and install other plugin versions\n- Fixed app crashing game on outdated plugins"
   },
   "plugin": {
     "latestVersion": "1.55",
