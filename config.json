@@ -1,9 +1,9 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.1.7",
-    "downloadURL": "https://modsfire.com/ZWsyXu72732PJ5s",
-    "changeLog": "- Feature to downgrade and install other plugin versions\n- Fixed app crashing game on outdated plugins"
+    "latestVersion": "1.1.8",
+    "downloadURL": "https://modsfire.com/jemCc5MR1Y03f3L",
+    "changeLog": "- Fix for error with creating config | error: <https://imgur.com/LZsVdCS>\n- **Added a feature to automatically change incorrect engine names in the guids file** \n - e.g. `/dc16/engine` -> `/engine/engine`"
   },
   "plugin": {
     "latestVersion": "1.55",
