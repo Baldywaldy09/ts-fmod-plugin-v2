@@ -1,9 +1,9 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.1.8",
-    "downloadURL": "https://modsfire.com/jemCc5MR1Y03f3L",
-    "changeLog": "- Fix for error with creating config | error: <https://imgur.com/LZsVdCS>\n- **Added a feature to automatically change incorrect engine names in the guids file** \n - e.g. `/dc16/engine` -> `/engine/engine`"
+    "latestVersion": "1.1.9",
+    "downloadURL": "https://modsfire.com/08fapzljJrtc3s0",
+    "changeLog": "- Fixed issue where you couldnt add more than 1 sound bank"
   },
   "plugin": {
     "latestVersion": "1.55",
