@@ -1,9 +1,9 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.2.0",
-    "downloadURL": "https://modsfire.com/9XQ1CD3F8fQPf1v",
-    "changeLog": "- Support for plugin 1.55.1\n- Reworked UI for manual game path setup\n- `Reload vehicle sounds` button now also reloads `global` sounds"
+    "latestVersion": "1.2.1",
+    "downloadURL": "https://modsfire.com/026NcMbRobvkawo",
+    "changeLog": "- Updated steam parser"
   },
   "plugin": {
     "latestVersion": "1.55.2",
