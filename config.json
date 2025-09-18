@@ -1,12 +1,12 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.2.1",
-    "downloadURL": "https://modsfire.com/026NcMbRobvkawo",
-    "changeLog": "- Updated steam parser"
+    "latestVersion": "1.2.2",
+    "downloadURL": "https://modsfire.com/T5jQ9g2uzm2E1vI",
+    "changeLog": "- Support for 1.56\n- Feature to manually select game paths"
   },
   "plugin": {
-    "latestVersion": "1.55.2",
-    "changeLog": "- Fixed infinite update loop"
+    "latestVersion": "1.56",
+    "changeLog": "- Support for 1.56\n- Updated FMOD to `2.03.09`"
   }
 }
