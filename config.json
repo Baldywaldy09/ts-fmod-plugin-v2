@@ -6,7 +6,7 @@
     "changeLog": "- Support for 1.56\n- Feature to manually select game paths"
   },
   "plugin": {
-    "latestVersion": "1.56",
-    "changeLog": "- Support for 1.56\n- Updated FMOD to `2.03.09`"
+    "latestVersion": "1.56.1",
+    "changeLog": "- Possible Echo Fix"
   }
 }
