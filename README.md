@@ -1,5 +1,5 @@
 <h1 align="center">
-TS-FMOD-Plugin Improved/V2 - ETS2 / ATS - 1.55
+TS-FMOD-Plugin Improved/V2 - ETS2 / ATS - 1.56
 </h1>
 A telemetry plugin for ATS/ETS2 that includes an FMOD instance so that you can use FMOD sound mods.
 
