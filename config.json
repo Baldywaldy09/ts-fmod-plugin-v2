@@ -1,9 +1,9 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.2.2",
-    "downloadURL": "https://modsfire.com/T5jQ9g2uzm2E1vI",
-    "changeLog": "- Support for 1.56\n- Feature to manually select game paths"
+    "latestVersion": "1.2.3",
+    "downloadURL": "https://modsfire.com/XSxy4JpAkUjmKQT",
+    "changeLog": "- Added DAF XF Electric\n- Added Scania S BEV\n- Added Iveco Hi-Way\n- Added Renault E-Tech T\n- Added info message after adding a bank file (echo)"
   },
   "plugin": {
     "latestVersion": "1.56",
