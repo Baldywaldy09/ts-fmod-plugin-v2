@@ -1,12 +1,12 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.2.3",
-    "downloadURL": "https://modsfire.com/XSxy4JpAkUjmKQT",
-    "changeLog": "- Added DAF XF Electric\n- Added Scania S BEV\n- Added Iveco Hi-Way\n- Added Renault E-Tech T\n- Added info message after adding a bank file (echo)"
+    "latestVersion": "1.2.4",
+    "downloadURL": "https://modsfire.com/RDEn9h01OEG37Su",
+    "changeLog": "- Support for 1.57"
   },
   "plugin": {
-    "latestVersion": "1.56",
-    "changeLog": "- Possible Echo Fix"
+    "latestVersion": "1.57",
+    "changeLog": "- Support for 1.57"
   }
 }
