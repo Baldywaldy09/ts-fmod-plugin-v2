@@ -1,5 +1,6 @@
 [
-  { "version": "1.58 (Latest)", "fileName": "1.58.bzip" },
+  { "version": "1.58.1 (Latest)", "fileName": "1.58.1.bzip" },
+  { "version": "1.58 (No Turbo Bug)", "fileName": "1.58.bzip" },
   { "version": "1.57", "fileName": "1.57.bzip" },
   { "version": "1.56.1", "fileName": "1.56.1.bzip" },
   { "version": "1.56 (Echo Bug)", "fileName": "1.56.bzip" },
