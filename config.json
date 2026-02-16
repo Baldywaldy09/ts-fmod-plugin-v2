@@ -6,7 +6,7 @@
     "changeLog": "- Support for 1.57\n- Removed echo popup"
   },
   "plugin": {
-    "latestVersion": "1.58",
-    "changeLog": "- Support for 1.58\n- **Fixed sound echo issues**\n- Renamed launch argument `-tsfmod_nodeadening` to `-tsfmod_deadening` so that deadening is now disabled by default\n- Fixed some issues with `sdk reload` and `sdk unload`"
+    "latestVersion": "1.58.1",
+    "changeLog": "- Fixed missing turbo"
   }
 }
