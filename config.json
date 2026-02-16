@@ -7,6 +7,6 @@
   },
   "plugin": {
     "latestVersion": "1.58.1",
-    "changeLog": "- Fixed missing turbo"
+    "changeLog": "- Fixed missing turbo\n- Fixed echo inside cabin when windows are down, or when looking out of windows"
   }
 }
