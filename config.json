@@ -1,12 +1,12 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.2.5",
-    "downloadURL": "https://modsfire.com/b68GSQVS5ragQhy",
-    "changeLog": "- Support for 1.57\n- Removed echo popup"
+    "latestVersion": "1.2.6",
+    "downloadURL": "https://modsfire.com/bL78EcsKKXh0V9K",
+    "changeLog": "- Support for 1.59"
   },
   "plugin": {
-    "latestVersion": "1.58.1",
-    "changeLog": "- Fixed missing turbo\n- Fixed echo inside cabin when windows are down, or when looking out of windows"
+    "latestVersion": "1.59",
+    "changeLog": "- Updated to 1.59"
   }
 }
