@@ -6,7 +6,7 @@
     "changeLog": "- Support for 1.59"
   },
   "plugin": {
-    "latestVersion": "1.59",
-    "changeLog": "- Updated to 1.59"
+    "latestVersion": "1.59.1",
+    "changeLog": "- Fixed multiple sound bugs"
   }
 }
