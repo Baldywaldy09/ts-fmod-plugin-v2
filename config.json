@@ -1,9 +1,9 @@
 {
   "bypass": false,
   "app": {
-    "latestVersion": "1.2.6",
-    "downloadURL": "https://modsfire.com/bL78EcsKKXh0V9K",
-    "changeLog": "- Support for 1.59"
+    "latestVersion": "1.2.7",
+    "downloadURL": "https://modsfire.com/DtX4cQ430rxTtcz",
+    "changeLog": "- Fixed one time popup system"
   },
   "plugin": {
     "latestVersion": "1.59.1",
