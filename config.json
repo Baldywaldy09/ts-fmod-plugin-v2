@@ -6,7 +6,7 @@
     "changeLog": "- Fixed one time popup system"
   },
   "plugin": {
-    "latestVersion": "1.59.1",
-    "changeLog": "- Fixed multiple sound bugs"
+    "latestVersion": "1.60",
+    "changeLog": "- Updated to 1.60"
   }
 }
